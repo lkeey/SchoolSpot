@@ -1,0 +1,66 @@
+{% extends 'templates_projects/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% load static %}
+
+
+    <div id="wrapper" class="log_in">
+
+        <!-- header-->
+        <div class="">
+            <div class="">
+
+
+                <div class="">
+
+                    <h1 class="name-site">SchoolSpot</h1>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Content-->
+
+        <div>
+            <div class="">
+                <!--<p class="mb-2 text-black text-lg"> Register to manage your account </p>-->
+                
+
+                <div>
+                    
+                    {% for message in messages %}
+                    <h5 class="warning-message"><i class="danger-icon fa-solid fa-circle-xmark"></i> {{message}}</h5>
+                    {% endfor %}
+                </div>
+                
+                
+                <form action="" method="POST" class="form-logging">
+                    <h1 class="process"> Sign Up</h1>
+                    {% csrf_token %}
+
+                    <input type="text" name="username" placeholder="Username" class="logging-input" >
+                    <!-- <input type="email" name="email" placeholder="Email" class="logging-input" > -->
+                    <input type="password" name="password" placeholder="Password" class="logging-input">
+                    <input type="password" name="password2" placeholder="Confirm Password" class="logging-input" >
+
+                    <button type="submit" class="check-data">Sign Up</button>
+                    
+                    <div class="create-acc">
+                        <p class="text-base"> Do you have an account? <a href="{% url 'sign_in' %}"> Login </a></p>
+                    </div>
+                    
+                    <!---- Регистрация через telegram >-->
+                    <script async src="https://telegram.org/js/telegram-widget.js?19" data-telegram-login="SocialWaveBot" data-size="large" data-radius="20" data-auth-url="http://socialwave.pythonanywhere.com/tele-entrance" data-request-access="write"></script>
+
+                </form>
+
+            </div>
+        </div>
+        
+
+    <script type="text/javascript" src="{% static 'discussions/script/background.js' %}"></script> 
+
+{% endblock %}
