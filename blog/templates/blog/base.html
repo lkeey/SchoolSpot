@@ -1,0 +1,17 @@
+{# for blog #}
+
+{% extends 'templates_projects/base.html' %}
+
+{# находится блок импортов #}
+{% block content %}
+
+{# находится блок контента #}
+<div class="body-blog">
+    {% block content_blog %}
+
+
+    {% endblock %}
+</div>
+{% include "templates_projects/navbar.html"%}
+
+{% endblock %}
