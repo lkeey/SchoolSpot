@@ -11,7 +11,7 @@
                 Feed            
             </label>                
    
-            <input type="radio" id="radio-2" name="tabs" onclick="location.href = '{% url "posts_feed" %}';"/>
+            <input type="radio" id="radio-2" name="tabs" onclick="location.href = '{% url "create_post" %}';"/>
 
             <label class="tab" for="radio-2">
             <i class="fa-solid fa-circle-plus"></i> Create
@@ -46,7 +46,7 @@
         if (location.pathname === '{% url "posts_feed" %}'){
             //alert("1_st TAB");
             document.getElementById("radio-1").checked = true;
-        } else if (location.pathname === '{% url "posts_feed" %}'){
+        } else if (location.pathname === '{% url "create_post" %}'){
             //alert("2_nd TAB");
             document.getElementById("radio-2").checked = true;
         } else if (location.pathname === '{% url "posts_feed" %}'){

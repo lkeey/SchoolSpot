@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Creating Post{% endblock %}
+
+{% load static %}
+
+{% block content_blog %}
+<div class="post post-create alert alert-info text-center">
+
+    <h2 class="title">What do you want to offer?</h2><br>
+
+    <form action="{% url 'create_post' %}" method="POST" class="dropzone" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div>
+            {{formset.media}}
+
+            {{formset|crispy}}
+        </div>
+
+        <input type="file" name="image_upload" class="input-save-post">
+
+        <br><input type="submit" value="SAVE" class="btn btn-save"><br>
+        
+    </form>
+
+</div>
+{% endblock %}

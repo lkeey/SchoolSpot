@@ -83,6 +83,7 @@ body {
     }
   
   .title {
+    min-width: fit-content;
     text-align: center;
   
     font-size: 30px;
@@ -480,7 +481,7 @@ body {
   
   .input-save-post {
   
-    margin: 1vw 31vw;
+    margin: 1vw auto;
     
     display: block;
   
@@ -490,9 +491,11 @@ body {
     font-size: 22px;
   
     color: white;
+    border: 1px solid rgb(155, 74, 248);
   
     background-image: linear-gradient(60deg, rgb(155, 74, 248) 10%, #000000 100%);
   
+    width: fit-content;
   }
   
   .input-post-title:focus, .input-post-content:focus{

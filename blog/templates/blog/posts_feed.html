@@ -7,4 +7,9 @@
     <h1>Here you can see all posts</h1>
     <h2>{{user}}</h2>
 
+    {% for post in all_posts %}
+        <!-- Post model -->
+        {% include "blog/post_model.html" with post=post %}
+    {% endfor %}
+
 {% endblock %}

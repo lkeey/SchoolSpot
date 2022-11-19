@@ -41,8 +41,10 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     # my apps
-    'blog.apps.BlogConfig',   
+    'blog.apps.BlogConfig',  
 
+    'ckeditor',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -144,6 +146,13 @@ STAICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# django-ckeiditor
+CKEDITOR_CONFIGS = {
+    'default': {
+        'width': 'auto',
+    },
+}
 
 # color of messages
 MESSAGE_TAGS = {
