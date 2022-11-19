@@ -9,6 +9,9 @@ from django.views.generic import (
 )
 from django.views.generic.edit import FormMixin
 from django.urls.base import reverse_lazy
+from django.http import HttpResponse
+import json
+from django.utils.text import slugify
 
 from .forms import PostCreateForm
 from .models import (
@@ -68,6 +71,37 @@ class PostDetailtView(DetailView):
        
         return reverse_lazy('post_detail', kwargs={"pk":self.get_object().id})
     
+class LikekView(View):
+    # в данную переменную будет устанавливаться модель закладок, которую необходимо обработать
+    model = None
+
+    def post(self, request, pk, id=0):
+        user = auth.get_user(request)
+
+        # проверка на существование лайка
+        like, created = self.model.objects.get_or_create(user=user, obj_id=pk)
+
+        print(f"USER {like.obj.author}\nCREATOR {user}\nOBJ_ID {pk}")
+
+        print("MODEL-CLASS IS", like.obj)
+
+        if not created:
+            like.delete()
+
+            like.obj.amount_of_likes -= 1
+            like.obj.save()
+
+        else:
+            like.obj.amount_of_likes += 1
+            like.obj.save()
+
+        return HttpResponse(
+            json.dumps({
+                "result": created,
+                "count": self.model.objects.filter(obj_id=pk).count()
+            }),
+            content_type="application/json"
+        )    
 
 @login_required(login_url='sign_in')
 def feed(request):
@@ -98,6 +132,7 @@ def post_create(request):
             new_post.author = request.user
 
             new_post.image = request.FILES.get("image_upload")
+
 
             new_post.save()
 

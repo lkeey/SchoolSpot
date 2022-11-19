@@ -83,6 +83,7 @@ body {
     }
   
   .title {
+    min-width: fit-content;
     text-align: center;
   
     font-size: 30px;
@@ -158,7 +159,7 @@ body {
   
   .avatar {
     margin: 0 4%;
-    margin-bottom: 100vh;
+    margin-bottom: 0vh;
   }
   
   .container{
@@ -190,9 +191,10 @@ body {
   
   .img-user {
     /* display: inline; */
+    margin: 1vw;
     border-radius: 50%;
-    width: 30vh; 
-    height: 30vh;
+    width: 25vh; 
+    height: 25vh;
     background-size: auto 300px;
   }
   
@@ -479,7 +481,7 @@ body {
   
   .input-save-post {
   
-    margin: 1vw 31vw;
+    margin: 1vw auto;
     
     display: block;
   
@@ -489,9 +491,11 @@ body {
     font-size: 22px;
   
     color: white;
+    border: 1px solid rgb(155, 74, 248);
   
     background-image: linear-gradient(60deg, rgb(155, 74, 248) 10%, #000000 100%);
   
+    width: fit-content;
   }
   
   .input-post-title:focus, .input-post-content:focus{
@@ -642,7 +646,7 @@ body {
   
   .b-popup{
     /* Регулировка положения вслывающего окна */
-    top: 105vh;
+    top: 20h;
   
     width: 95%;
     min-height: fit-content;
@@ -677,7 +681,7 @@ body {
   
     /* background-color: red; */
     
-    margin: 1% auto 10vw auto;
+    margin: 1% auto 30vh auto;
   
     padding: 10px;
   
@@ -689,12 +693,13 @@ body {
   
     position: fixed;
   
-    left: 85vw;
+    right: 10vw;
   
     top: 60vh;
   
-    padding: .5vw 1vw;
+    padding: 1vw 1vw;
     border-radius: 50px;
+
     min-width: fit-content;
     background-image: linear-gradient(60deg, rgb(18, 19, 19) 10%, #eef60a 100%);
   
@@ -794,14 +799,16 @@ body {
   }
   
   .input-save {
-    margin: 1vw 3vw;
+
+    width: auto;
+    margin: 1vw auto;
     
     display: block;
   
     border-radius: 30px;
     
     font-weight: 500;
-    font-size: 22px;
+    font-size: 18px;
   
     color: white;
   

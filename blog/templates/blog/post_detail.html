@@ -4,6 +4,8 @@
 
 {% block content_blog %}
 
+{% include "blog/like.html" %}
+
 <div>
     {% for message in messages %}
             
@@ -17,6 +19,7 @@
 
     {% endfor %}
 </div>
+
 
 <!-- Post model -->
 {% include "blog/post_model.html" with post=post_detail %}

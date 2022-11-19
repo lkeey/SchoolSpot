@@ -4,7 +4,12 @@ from django.contrib.auth.decorators import login_required
 
 from .views import (
     UsertListView, PostDetailtView,
+    LikekView,
 ) 
+
+from .models import (
+    PostLike,
+)
 
 urlpatterns = [
     # все посты
@@ -18,6 +23,11 @@ urlpatterns = [
     # добавление постов
     path('create', views.post_create, name='create_post'),
     # представление одного поста
-    path('<int:pk>/detail', PostDetailtView.as_view(), name='post_detail'),   
+    path('<int:pk>/detail', PostDetailtView.as_view(), name='post_detail'), 
+    # лайк поста
+    path('post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+    # like in detail
+    path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+
 
 ]
