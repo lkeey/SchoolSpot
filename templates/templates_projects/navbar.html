@@ -31,7 +31,7 @@
                
             </label>
             
-            <input type="radio" id="radio-5" name="tabs" onclick="location.href = '{% url "posts_feed" %}';" />
+            <input type="radio" id="radio-5" name="tabs" onclick="location.href = '{% url "student_profile" %}';" />
             <label class="tab" for="radio-5"><i class="fa-solid fa-house-flood-water"></i> Profile</label>
             
             <span class="glider"></span>
@@ -55,7 +55,7 @@
         } else if (location.pathname === '{% url "posts_feed" %}'){
             //alert("4_th TAB");
             document.getElementById("radio-4").checked = true;
-        } else {
+        } else if (location.pathname === '{% url "student_profile" %}') {
             //alert("5_th TAB");
             document.getElementById("radio-5").checked = true;
 

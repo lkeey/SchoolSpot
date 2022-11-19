@@ -891,13 +891,14 @@ body {
   .name-site {
   
     font-size: 70px;
-    margin: 0 0 2vw 10vw;
+    margin: 0 0 2vw 6vw;
   
     font-weight: 500;
   
   } 
   
   .form-logging {
+    
     border-radius: 30px;
   
     padding: 2vw 3vw;
@@ -914,7 +915,9 @@ body {
   
     margin: 0 0 1vw 2vw;
   }
-  
+  ::-webkit-input-placeholder {
+    text-align:center;
+    }
   .logging-input {
     border-radius: 30px;
     border: 1px solid #7522bd;
@@ -924,7 +927,7 @@ body {
   
     display: block;
   
-    width: 25vw;
+    width: fit-content;
   
     color: #7522bd;
     font-weight: 500;

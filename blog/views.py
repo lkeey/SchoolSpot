@@ -3,15 +3,66 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic import (
+    ListView, CreateView, 
+    DetailView, View,
+)
 
 from .models import Student
 
 # Create your views here.
 
+class UsertListView(ListView):
+    # model in models.py
+    model = Student
+
+    # name of template
+    template_name = 'blog/profile.html'
+
+    # save data for cycle "for" in user_posts.html
+    context_object_name = 'blog_post_user_list'
+
+    def get_context_data(self, **kwargs):
+        user = auth.get_user(self.request)
+        student = Student.objects.get(user=user)
+
+        context = {
+            'user': user,
+            'student': student,
+        }
+
+        return context
+
+    def post(self, request, **kwargs):
+
+        student = Student.objects.get(user=request.user)
+
+        if request.FILES.get('image') == None:
+            image = student.profile_img
+            
+        if request.FILES.get('image') != None:
+            image = request.FILES.get('image')
+
+        bio = request.POST['bio']
+        location = request.POST['location']
+
+        student.profile_img = image
+        student.bio = bio
+        student.location = location
+        student.save()
+
+        return redirect('student_profile')    
+
 @login_required(login_url='sign_in')
 def feed(request):
     # show all posts
-    return render(request, 'blog/posts_feed.html')
+
+    context = {
+        "user": request.user,
+        "student": request.user.student,
+    }
+
+    return render(request, 'blog/posts_feed.html', context=context)
 
 def sign_in(request):
     # logging
