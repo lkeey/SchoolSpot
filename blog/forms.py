@@ -1,4 +1,4 @@
-from .models import Post
+from .models import Post, Student
 from django.forms import ModelForm, Textarea
  
 
@@ -20,3 +20,14 @@ class PostCreateForm(ModelForm):
         )
         
         self.fields['content'].widget.attrs['class'] = 'form-control, input-post-content'
+
+class GradeForm(ModelForm):
+    class Meta:
+            model = Student
+            fields = ('grade',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['grade'].widget.attrs['class'] = 'btn dropdown-toggle dropdown-toggle-split grade-form'
+

@@ -12,6 +12,32 @@ User = get_user_model()
 
 class Student(models.Model):
 
+    CHOICES = (
+        ('5А', '5 "А"'),
+        ('5Б', '5 "Б"'),
+        ('5В', '5 "В"'),
+
+        ('6А', '6 "А"'),
+        ('6Б', '6 "Б"'),
+        ('6В', '6 "В"'),
+
+        ('7А', '7 "А"'),
+        ('7Б', '7 "Б"'),
+        ('7В', '7 "В"'),
+
+        ('8А', '8 "А"'),
+        ('8Б', '8 "Б"'),
+        ('8В', '8 "В"'),
+
+        ('9А', '9 "А"'),
+        ('9Б', '9 "Б"'),
+        ('9В', '9 "В"'),
+
+        ('10А', '10 "А"'),
+        ('11А', '11 "А"'),
+        
+    )
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -20,21 +46,18 @@ class Student(models.Model):
 
     id_user = models.IntegerField()
     
-    bio = models.TextField(blank=True)
+    grade = models.CharField('', choices=CHOICES, max_length=100)
     
-    telegram_id = models.IntegerField(default=0)
-
     profile_img = models.ImageField(
         upload_to='profile_images', 
         default='profile_images/blank-profile-img.png'
         )
     
-    # добавить выбор между первым и вторым корпусом
-    # добавить классы(Class, Teacher)
-    location = models.CharField(max_length=100, blank=True)
-
     def __str__(self):
         return self.user.username
+
+    def get_amount_marks(self):
+        return self.owner.all().count()
 
 class Post(models.Model):
     class Meta:
@@ -103,6 +126,23 @@ class PostLike(LikesBase):
         Post,
         on_delete=models.CASCADE,
     )
+
+class Mark(models.Model):
+    class Meta:
+        verbose_name = 'Mark'
+        verbose_name_plural = 'Marks'
+
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        related_name='owner',
+    )
+  
+    date_created = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return self.student.user.username
+
 
 def unique_slugify(length):
 

@@ -7,15 +7,17 @@ from django.views.generic import (
     ListView, CreateView, 
     DetailView, View,
 )
+
 from django.views.generic.edit import FormMixin
 from django.urls.base import reverse_lazy
 from django.http import HttpResponse
 import json
 from django.utils.text import slugify
 
-from .forms import PostCreateForm
+from .forms import PostCreateForm, GradeForm
 from .models import (
         Student, Post,
+        PostLike, Mark
     )
 
 # Create your views here.
@@ -51,12 +53,8 @@ class UsertListView(ListView):
         if request.FILES.get('image') != None:
             image = request.FILES.get('image')
 
-        bio = request.POST['bio']
-        location = request.POST['location']
 
         student.profile_img = image
-        student.bio = bio
-        student.location = location
         student.save()
 
         return redirect('student_profile')    
@@ -103,14 +101,35 @@ class LikekView(View):
             content_type="application/json"
         )    
 
+class MarkView(View):
+    model = Student
+    print("Im here")
+
+    def post(self, request):
+        print("HEREEE")
+        user = auth.get_user(request)
+
+        Mark.objects.create(
+            student=user.student
+        )
+
+        print("Добавлена 5 -", user.student)
+
+        return HttpResponse(
+            json.dumps({
+                "count": user.student.get_amount_marks(),
+            }),
+            content_type="application/json"
+        )  
+
 @login_required(login_url='sign_in')
 def feed(request):
     # show all posts
 
     context = {
         "user": request.user,
-        "student": request.user.student,
-        "all_posts": Post.objects.order_by('-date_created'),
+        "student": request.user.student.first,
+        "all_posts": Post.objects.filter().order_by('-date_created'),
     }
 
     return render(request, 'blog/posts_feed.html', context=context)
@@ -132,7 +151,6 @@ def post_create(request):
             new_post.author = request.user
 
             new_post.image = request.FILES.get("image_upload")
-
 
             new_post.save()
 
@@ -157,6 +175,7 @@ def post_create(request):
 def sign_in(request):
     # logging
     if request.method == 'POST':
+        
         username = request.POST['username']
         password = request.POST['password']
 
@@ -191,66 +210,76 @@ def sign_up(request):
     # registration
 
     if request.method == 'POST':
-        
-        username = request.POST['username']
-        # email = request.POST['email']
-        # telegram_id - default (0)
-        password = request.POST['password']
-        password2 = request.POST['password2']
+        form = GradeForm(request.POST, request.FILES)
 
-        if password == password2:
+        if form.is_valid():
+            username = request.POST['username']
+            # email = request.POST['email']
+            # telegram_id - default (0)
+            password = request.POST['password']
+            password2 = request.POST['password2']
 
-            if len(username) >= 3 and len(password) >= 8:
+            if password == password2:
 
-                if User.objects.filter(username=username).exists():
-                    messages.info(request, "Username was taken")
+                if len(username) >= 3 and len(password) >= 8:
 
+                    if User.objects.filter(username=username).exists():
+                        messages.info(request, "Username was taken")
+
+                    else:
+
+                        # create User
+                        user = User.objects.create_user(
+                            username=username,
+                            # email=email,
+                            password=password
+                        )
+
+                        user.save()
+
+                        # redirect to settings
+                        user_login = auth.authenticate(username=username, password=password)
+
+                        auth.login(request, user_login)
+
+                        # Create User's profile
+                        user_model = User.objects.get(username=username)
+                        
+                        new_profile = form.save(commit=False)
+                        new_profile.user = user_model
+                        new_profile.id_user = user_model.id
+                        # new_profile = Student.objects.create(
+                        #     user=user_model, 
+                        #     id_user=user_model.id,
+                        # )
+
+                        new_profile.save()
+
+                        messages.info(request, f'Hello, {user.username}')
+                        messages.success(request, 'We are glad to see you in SchoolSpot')
+
+                        data = {
+                                # "all_posts": Post.objects.order_by('-date_created'),
+                            }
+
+                        # return render(request, 'discussions/posts_feed.html', data)
+                        return redirect('posts_feed')
                 else:
+                    messages.info(request, 'The username must be more than 2 characters and the password more than 7')
 
-                    # create User
-                    user = User.objects.create_user(
-                        username=username,
-                        # email=email,
-                        password=password
-                    )
-
-                    user.save()
-
-                    # redirect to settings
-                    user_login = auth.authenticate(username=username, password=password)
-
-                    auth.login(request, user_login)
-
-                    # Create User's profile
-                    user_model = User.objects.get(username=username)
-                    
-                    new_profile = Student.objects.create(
-                        user=user_model, 
-                        id_user=user_model.id,
-                    )
-
-                    new_profile.save()
-
-                    messages.info(request, f'Hello, {user.username}')
-                    messages.success(request, 'We are glad to see you in SchoolSpot')
-
-                    data = {
-                            # "all_posts": Post.objects.order_by('-date_created'),
-                        }
-
-                    # return render(request, 'discussions/posts_feed.html', data)
-                    return redirect('posts_feed')
             else:
-                messages.info(request, 'The username must be more than 2 characters and the password more than 7')
-
+                messages.info(request, 'Password is not matching')
+                return redirect('sign_up')
         else:
-            messages.info(request, 'Password is not matching')
-            return redirect('sign_up')
+            messages.warning(request, 'Data is invalid')
+
 
     # telegram_login_widget = create_callback_login_widget(bot_name, size=SMALL)
 
     context = {
         # 'telegram_login_widget': telegram_login_widget
+        "formset": GradeForm
+
     }
 
     return render(request, 'blog/sign_up.html', context )

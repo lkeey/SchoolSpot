@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import(
     Student,
     Post,
+    Mark,
 )
 
 # Register your models here.
@@ -15,4 +16,5 @@ class PageAdmin(admin.ModelAdmin):
     }
 
 
+admin.site.register(Mark)
 admin.site.register(Student)

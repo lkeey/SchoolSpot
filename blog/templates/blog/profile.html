@@ -20,12 +20,44 @@
                 </div>
             </a>
             <div class="box-info-user">
-                <h3 class="name-user">{{ student.user.username }}</h3>
-                <h2 class="bio">{{ student.bio }}</h2>
+                <h3 class="name-user">{{ student.user.username }}, </h3>
+                <h2 class="bio">{{ student.grade }}</h2>
             </div> 
     
         </div>
     </div>  
+
+
+
+    <div class="b-container statistics text-center col-5 col-lg-3"> 
+
+        <a href="javascript:PopUpShow3th()">Statistics</a>
+
+    </div>
+
+    <div class="b-popup" id="popup3">
+
+        <div class="close-btn text-center">
+            <a href="javascript:PopUpHide()"><i class="fa-solid fa-xmark"></i> Close</a>
+        </div>
+        
+        <div class="b-popup-content">
+            <div class="container m-auto"> 
+                <br>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8 ">
+        
+                    <div class="rounded-md lg:shadow-lg shadow col-span-2">
+                        <p>Количество пятерок - {{student.get_amount_marks}}</p>
+                        <p data-count="marks">{{student.get_amount_marks}}</p>
+                        <div class="grade-form" data-action="add_mark">
+                            <p>Я получил 5..)</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="b-container settings text-center col-5 col-lg-3"> 
 
         <a href="javascript:PopUpShow4th()">Settings</a>
@@ -55,15 +87,6 @@
                                 <input type="file" name="image" value="" class="shadow-none input-save">
                             </div>
                             
-                            <div class="col-span-2">
-                                <label for="about">Bio</label>  
-                                <textarea id="about" placeholder="Write a little about yourself..." name="bio" rows="3"  class="shadow-none settings-field">{{student.bio}}</textarea>
-                            </div> 
-                            
-                            <div class="col-span-2">
-                                <label for=""> Location</label>
-                                <input placeholder="Write country are you in..." type="text" name="location" value="{{student.location}}" class="shadow-none settings-field">
-                            </div>
                             
                         </div> 
         
@@ -101,6 +124,16 @@
         $("#popup6").hide();
     }
 
+    function PopUpShow3th(){
+        $("#popup3").show();
+
+        $("#popup1").hide();
+        $("#popup2").hide();
+        $("#popup4").hide();
+        $("#popup5").hide();
+        $("#popup6").hide();
+    }
+
     //Функция скрытия PopUp
     function PopUpHide(){
         $("#popup1").hide();
@@ -113,6 +146,26 @@
         $("#PopUpShow2ndPosts").hide();
         $("#PopUpShow2ndComments").hide();
     }
+
+    function add_mark()
+    {        
+        $.ajax({
+            url : "{{ add_mark }}",
+            type : 'POST',
+     
+            success : function (json) {
+                alert("SUCCESS")             
+                current.find("[data-count='marks']").text(json.count);
+            }
+        });
+     
+        return false;
+    }
+    $(function() {
+        // Лайк
+        $('[data-action="add_mark"]').click(add_mark);
+    });
+
 </script>
 
 {% endblock %}

@@ -20,12 +20,14 @@
 
         {% endfor %}
     </div>
-
-    <h2>{{user}}</h2>
-
-    {% for post in all_posts %}
-        <!-- Post model -->
-        {% include "blog/post_model.html" with post=post %}
-    {% endfor %}
+    
+    {% if all_posts|length > 0 %}
+        {% for post in all_posts %}
+            <!-- Post model -->
+            {% include "blog/post_model.html" with post=post %}
+        {% endfor %}
+    {% else %}
+        <h5 class="warning-message"><i class="wave-icon fa-solid fa-circle-dot"></i> К сожалению, больше постов нет...</h5>
+    {% endif %}
 
 {% endblock %}
