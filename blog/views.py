@@ -44,7 +44,7 @@ class UsertListView(ListView):
         return context
 
     def post(self, request, **kwargs):
-
+        print("POST!!")
         student = Student.objects.get(user=request.user)
 
         if request.FILES.get('image') == None:
@@ -103,21 +103,21 @@ class LikekView(View):
 
 class MarkView(View):
     model = Student
-    print("Im here")
 
     def post(self, request):
-        print("HEREEE")
         user = auth.get_user(request)
 
+        print("USER", user, user.student.first().grade)
+
         Mark.objects.create(
-            student=user.student
+            student=user.student.first()
         )
 
-        print("Добавлена 5 -", user.student)
+        print("Добавлена 5 -", user.student.first())
 
         return HttpResponse(
             json.dumps({
-                "count": user.student.get_amount_marks(),
+                "count": user.student.first().get_amount_marks(),
             }),
             content_type="application/json"
         )  

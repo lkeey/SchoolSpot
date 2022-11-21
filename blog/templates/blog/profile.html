@@ -48,8 +48,9 @@
         
                     <div class="rounded-md lg:shadow-lg shadow col-span-2">
                         <p>Количество пятерок - {{student.get_amount_marks}}</p>
-                        <p data-count="marks">{{student.get_amount_marks}}</p>
                         <div class="grade-form" data-action="add_mark">
+                            <p data-count="marks">{{student.get_amount_marks}}</p>
+
                             <p>Я получил 5..)</p>
                         </div>
 
@@ -149,14 +150,19 @@
 
     function add_mark()
     {        
+        var current = $(this);
+
         $.ajax({
-            url : "{{ add_mark }}",
+            url : "/mark",
             type : 'POST',
+            data : {},
      
             success : function (json) {
-                alert("SUCCESS")             
+                //alert("SUCCESS")             
                 current.find("[data-count='marks']").text(json.count);
-            }
+                alert(json.count)
+            },
+
         });
      
         return false;
