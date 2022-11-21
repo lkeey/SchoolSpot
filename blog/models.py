@@ -138,7 +138,7 @@ class Mark(models.Model):
         related_name='owner',
     )
   
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField('',default=datetime.now)
 
     def __str__(self):
         return self.student.user.username

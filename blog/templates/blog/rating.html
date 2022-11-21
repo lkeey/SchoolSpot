@@ -1,0 +1,18 @@
+{% extends "blog/base.html" %}
+{% block title %}Search{% endblock %}
+{% block content_blog %}
+    {{data}} {{results}} 
+    <h3>{{prod}}</h3>
+
+    <form action="" method="POST" class="form-logging">
+        <h1 class="process">Choose Grade And Period</h1>
+        {% csrf_token %}
+        <input type="date" id="begin_date" name="begin_date">
+        <input type="date" id="end_date" name="end_date">
+        {{form}}
+
+        <button type="submit" class="check-data">Search</button>
+
+    </form>
+    
+{% endblock %}

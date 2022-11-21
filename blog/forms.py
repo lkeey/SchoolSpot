@@ -1,6 +1,8 @@
-from .models import Post, Student
+from .models import Post, Student, Mark
 from django.forms import ModelForm, Textarea
- 
+from django.contrib.admin import widgets 
+from django import forms
+from datetime import datetime
 
 class PostCreateForm(ModelForm):
     class Meta:
@@ -23,8 +25,8 @@ class PostCreateForm(ModelForm):
 
 class GradeForm(ModelForm):
     class Meta:
-            model = Student
-            fields = ('grade',)
+        model = Student
+        fields = ('grade',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

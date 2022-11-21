@@ -7,7 +7,7 @@ from django.views.generic import (
     ListView, CreateView, 
     DetailView, View,
 )
-
+from datetime import datetime
 from django.views.generic.edit import FormMixin
 from django.urls.base import reverse_lazy
 from django.http import HttpResponse
@@ -19,6 +19,7 @@ from .models import (
         Student, Post,
         PostLike, Mark
     )
+from django.db.models import Count
 
 # Create your views here.
 
@@ -171,6 +172,34 @@ def post_create(request):
 
     return render(request, 'blog/create.html', {'formset': formset})
 
+@login_required(login_url='sign_in')
+def rating(request):
+    if request.method == "POST":
+        form = GradeForm(request.POST) 
+
+        begin_date = datetime.strptime(request.POST['begin_date'], '%Y-%m-%d').date()
+        end_date = datetime.strptime(request.POST['end_date'], '%Y-%m-%d').date()
+
+        if form.is_valid(): 
+            grade_form = form.cleaned_data['grade'] 
+            obj = Student.objects.filter(grade=grade_form, owner__date_created__range=(begin_date, end_date))
+           
+            context = {
+                "data": [begin_date, grade_form],
+                "results": obj,
+                "prod": obj.annotate(count=Count('owner__id')).order_by('-count')
+            }
+            # https://django.fun/ru/qa/99584/
+            
+            return render(request, "blog/rating.html", context)
+
+    form = GradeForm() 
+    context = {
+        "form": form,
+    }
+
+    return render(request, "blog/rating.html", context)
+    
 
 def sign_in(request):
     # logging

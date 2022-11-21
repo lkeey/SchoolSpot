@@ -30,5 +30,7 @@ urlpatterns = [
     path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
     # add mark
     path('mark', MarkView.as_view(), name='add_mark'),
+    # rating
+    path('rating', views.rating, name='rating'),
 
 ]

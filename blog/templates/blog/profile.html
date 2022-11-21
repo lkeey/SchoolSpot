@@ -47,11 +47,12 @@
                 <div class="grid lg:grid-cols-3 mt-12 gap-8 ">
         
                     <div class="rounded-md lg:shadow-lg shadow col-span-2">
-                        <p>Количество пятерок - {{student.get_amount_marks}}</p>
-                        <div class="grade-form" data-action="add_mark">
-                            <p data-count="marks">{{student.get_amount_marks}}</p>
-
-                            <p>Я получил 5..)</p>
+                        <div class="grade-form text-center" data-action="add_mark">
+                            <p class="add-mark">
+                                <i class="fa-solid fa-circle-plus success-icon"></i>
+                                Я получил 5..)
+                            </p>
+                            <p data-count="marks" class="amount-mark">{{student.get_amount_marks}}</p>
                         </div>
 
                     </div>
@@ -160,7 +161,7 @@
             success : function (json) {
                 //alert("SUCCESS")             
                 current.find("[data-count='marks']").text(json.count);
-                alert(json.count)
+                //alert(json.count)
             },
 
         });
