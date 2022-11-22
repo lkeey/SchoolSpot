@@ -174,27 +174,40 @@ def post_create(request):
 
 @login_required(login_url='sign_in')
 def rating(request):
+    form = GradeForm()
+
     if request.method == "POST":
         form = GradeForm(request.POST) 
 
-        begin_date = datetime.strptime(request.POST['begin_date'], '%Y-%m-%d').date()
-        end_date = datetime.strptime(request.POST['end_date'], '%Y-%m-%d').date()
+        # begin_date = datetime.strptime(request.POST['begin_date']+"T00:00:00.000Z", '%Y-%m-%dT%H:%M:%S.%fZ').date() 
+        # end_date = datetime.strptime(request.POST['end_date']+"T00:00:00.000Z", '%Y-%m-%dT%H:%M:%S.%fZ').date() 
 
+        # print("DATE", request.POST['begin_date'])
+        
+        begin_date = str(request.POST['begin_date']) + "T00:00:00.000Z"
+        end_date = str(request.POST['end_date']) + "T23:59:00.000Z"
+
+        # 2021-10-22T16:00:00.000Z
+        # %Y-%m-%dT%H:%M:%S.%fZ
         if form.is_valid(): 
             grade_form = form.cleaned_data['grade'] 
             obj = Student.objects.filter(grade=grade_form, owner__date_created__range=(begin_date, end_date))
-           
+            print("OBJ", obj)
             context = {
-                "data": [begin_date, grade_form],
+                "status": True,
+                "form": form,
+                "grade": grade_form,
+                "begin_date": datetime.strptime(request.POST['begin_date'], '%Y-%m-%d').date() ,
+                "end_date": datetime.strptime(request.POST['end_date'], '%Y-%m-%d').date() ,
                 "results": obj,
                 "prod": obj.annotate(count=Count('owner__id')).order_by('-count')
             }
             # https://django.fun/ru/qa/99584/
             
             return render(request, "blog/rating.html", context)
-
-    form = GradeForm() 
+ 
     context = {
+        "status": False,
         "form": form,
     }
 

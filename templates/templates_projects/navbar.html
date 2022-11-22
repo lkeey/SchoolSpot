@@ -17,10 +17,10 @@
             <i class="fa-solid fa-circle-plus"></i> Create
             </label>
 
-            <input type="radio" id="radio-3" name="tabs" onclick="location.href = '{% url "posts_feed" %}';"/>
+            <input type="radio" id="radio-3" name="tabs" onclick="location.href = '{% url "rating" %}';"/>
 
             <label class="tab" for="radio-3">
-                <i class="fa-solid fa-laptop-code"></i> Users   
+            <i class="fa-solid fa-chart-simple"></i> Rating   
             </label>
 
 
@@ -49,7 +49,7 @@
         } else if (location.pathname === '{% url "create_post" %}'){
             //alert("2_nd TAB");
             document.getElementById("radio-2").checked = true;
-        } else if (location.pathname === '{% url "posts_feed" %}'){
+        } else if (location.pathname === '{% url "rating" %}'){
             //alert("3_rd TAB");
             document.getElementById("radio-3").checked = true;
         } else if (location.pathname === '{% url "posts_feed" %}'){

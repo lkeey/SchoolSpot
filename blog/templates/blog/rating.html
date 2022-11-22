@@ -1,18 +1,48 @@
 {% extends "blog/base.html" %}
 {% block title %}Search{% endblock %}
 {% block content_blog %}
+
     {{data}} {{results}} 
     <h3>{{prod}}</h3>
 
     <form action="" method="POST" class="form-logging">
         <h1 class="process">Choose Grade And Period</h1>
         {% csrf_token %}
-        <input type="date" id="begin_date" name="begin_date">
-        <input type="date" id="end_date" name="end_date">
+        <input type="date" id="begin_date" name="begin_date" value="{{begin_date}}" class="calendar">
+        <input type="date" id="end_date" name="end_date" value="{{end_date}}" class="calendar">
         {{form}}
 
         <button type="submit" class="check-data">Search</button>
 
     </form>
+
+    {% if status %}
+        <div class="extra-place">
+            {% if results|length > 0 %}
+                
+                <div class="form-logging">
+                    <h1 class="process">Results</h1>
+                    <p class="date-range">Begin - {{begin_date}}</p>
+                    <p class="date-range">End - {{end_date}}</p>
+
+                    {% for student in prod %}
+                        <div class="form-sending">
+                            <h3>{{student}}, {{student.get_amount_marks}}</h3>
+
+                            <div class="check-data send-certificate">
+                                <p>Send Sertificate</p>
+                            </div>
+                            
+                        </div>
+                    {% endfor %}
+
+                </div>
+                
+            {% else %}
+                <h5 class="warning-message"><i class="danger-icon fa-solid fa-circle-xmark"></i> Ни один ученик с заданными параметрами не найден...</h5>
+            {% endif %}
+            
+        </div>
+    {% endif %}
     
 {% endblock %}
