@@ -3,6 +3,7 @@ from .models import(
     Student,
     Post,
     Mark,
+    Certificate
 )
 
 # Register your models here.
@@ -16,5 +17,6 @@ class PageAdmin(admin.ModelAdmin):
     }
 
 
+admin.site.register(Certificate)
 admin.site.register(Mark)
 admin.site.register(Student)

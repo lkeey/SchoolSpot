@@ -17,7 +17,7 @@ from django.utils.text import slugify
 from .forms import PostCreateForm, GradeForm
 from .models import (
         Student, Post,
-        PostLike, Mark
+        PostLike, Mark, Certificate
     )
 from django.db.models import Count
 
@@ -123,6 +123,35 @@ class MarkView(View):
             content_type="application/json"
         )  
 
+class CertificateView(View):
+    model = Certificate
+
+    print("CERTIFICATE1")
+
+    def post(self, request, begin_date, end_date, student):
+        user = auth.get_user(request)
+
+        student = Student.objects.get(
+            user__username=student
+        )
+
+        print("DATA - ", begin_date, end_date)
+
+        Certificate.objects.create(
+            student=student,
+            date_begin=begin_date,
+            date_end=end_date
+        )
+
+        print("Добавлен Сертификат -", student)
+
+        return HttpResponse(
+            json.dumps({
+                "status": True,
+            }),
+            content_type="application/json"
+        ) 
+
 @login_required(login_url='sign_in')
 def feed(request):
     # show all posts
@@ -197,10 +226,15 @@ def rating(request):
                 "status": True,
                 "form": form,
                 "grade": grade_form,
+
                 "begin_date": datetime.strptime(request.POST['begin_date'], '%Y-%m-%d').date() ,
                 "end_date": datetime.strptime(request.POST['end_date'], '%Y-%m-%d').date() ,
+                
+                "begin_date_model": begin_date,
+                "end_date_model": end_date,
+                
                 "results": obj,
-                "prod": obj.annotate(count=Count('owner__id')).order_by('-count')
+                "prod": obj.annotate(count=Count('owner__id')).order_by('-count')[:5],
             }
             # https://django.fun/ru/qa/99584/
             
@@ -212,8 +246,7 @@ def rating(request):
     }
 
     return render(request, "blog/rating.html", context)
-    
-
+ 
 def sign_in(request):
     # logging
     if request.method == 'POST':

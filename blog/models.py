@@ -143,6 +143,20 @@ class Mark(models.Model):
     def __str__(self):
         return self.student.user.username
 
+class Certificate(models.Model):
+    class Meta:
+        verbose_name = 'Certificate'
+        verbose_name_plural = 'Certificate'
+
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        related_name='profile',
+    )
+
+    date_begin = models.DateTimeField('', default=datetime.now)
+    date_end = models.DateTimeField('', default=datetime.now)
+
 
 def unique_slugify(length):
 

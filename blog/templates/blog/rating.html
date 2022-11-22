@@ -1,10 +1,6 @@
 {% extends "blog/base.html" %}
 {% block title %}Search{% endblock %}
 {% block content_blog %}
-
-    {{data}} {{results}} 
-    <h3>{{prod}}</h3>
-
     <form action="" method="POST" class="form-logging">
         <h1 class="process">Choose Grade And Period</h1>
         {% csrf_token %}
@@ -29,7 +25,10 @@
                         <div class="form-sending">
                             <h3>{{student}}, {{student.get_amount_marks}}</h3>
 
-                            <div class="check-data send-certificate">
+                            <div 
+                            data-action="send_certificate"
+                            data-student="{{student}}"
+                            class="check-data send-certificate">
                                 <p>Send Sertificate</p>
                             </div>
                             
@@ -44,5 +43,31 @@
             
         </div>
     {% endif %}
-    
+ 
+<script>
+    function send_certificate()
+    {        
+        var current = $(this);
+        var student = current.data('student');
+
+        $.ajax({
+            url : "{{begin_date_model}}/{{end_date_model}}/" + student + "/certificate",
+            type : 'POST',
+            data : {},
+     
+            success : function (json) {
+                alert("SUCCESS")             
+              
+            },
+
+        });
+     
+        return false;
+    }
+    $(function() {
+        // Лайк
+        $('[data-action="send_certificate"]').click(send_certificate);
+    });
+</script>    
+
 {% endblock %}

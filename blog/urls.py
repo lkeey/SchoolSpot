@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from .views import (
     UsertListView, PostDetailtView,
-    LikekView, MarkView
+    LikekView, MarkView, CertificateView
 ) 
 
 from .models import (
@@ -32,5 +32,7 @@ urlpatterns = [
     path('mark', MarkView.as_view(), name='add_mark'),
     # rating
     path('rating', views.rating, name='rating'),
+    # create certificate
+    path('<begin_date>/<end_date>/<student>/certificate', CertificateView.as_view(), name='add_certificate'),
 
 ]
