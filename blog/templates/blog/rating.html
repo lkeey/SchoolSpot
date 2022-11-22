@@ -1,5 +1,8 @@
 {% extends "blog/base.html" %}
 {% block title %}Search{% endblock %}
+
+{% load blog_tags %}
+
 {% block content_blog %}
     <form action="" method="POST" class="form-logging">
         <h1 class="process">Choose Grade And Period</h1>
@@ -20,21 +23,26 @@
                     <h1 class="process">Results</h1>
                     <p class="date-range">Begin - {{begin_date}}</p>
                     <p class="date-range">End - {{end_date}}</p>
-
+                    <div class="text-center">
                     {% for student in prod %}
                         <div class="form-sending">
                             <h3>{{student}}, {{student.get_amount_marks}}</h3>
 
-                            <div 
-                            data-action="send_certificate"
-                            data-student="{{student}}"
-                            class="check-data send-certificate">
-                                <p>Send Sertificate</p>
-                            </div>
+                            {% was_certificated student begin_date_model end_date_model as certificated%}
+                            {% if certificated %}    
+                                <h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i> Has Already Sent</h5>
                             
+                            {% else %}
+                                <div data-action="send_certificate"
+                                data-student="{{student}}"
+                                class="check-data send-certificate"
+                                id="data-cert">
+                                    <p id="sending-cert">Send Sertificate</p>
+                                </div>
+                            {% endif %}
                         </div>
                     {% endfor %}
-
+                    </div>
                 </div>
                 
             {% else %}
@@ -55,9 +63,14 @@
             type : 'POST',
             data : {},
      
-            success : function (json) {
-                alert("SUCCESS")             
-              
+            success : function (json) {            
+                let paragraph = document.querySelector('#sending-cert');
+                alert(paragraph);
+
+                let div = document.querySelector('#data-cert');;
+                div.classList.remove('check-data');
+
+                paragraph.innerHTML = '<h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i> Has Already Sent</h5>';
             },
 
         });

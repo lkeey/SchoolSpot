@@ -29,6 +29,39 @@
 
 
 
+    <div class="b-container success text-center col-5 col-lg-3"> 
+
+        <a href="javascript:PopUpShow2th()">Certificates</a>
+
+    </div>
+
+    <div class="b-popup" id="popup2">
+
+        <div class="close-btn text-center">
+            <a href="javascript:PopUpHide()"><i class="fa-solid fa-xmark"></i> Close</a>
+        </div>
+        
+        <div class="b-popup-content">
+            <div class="container m-auto"> 
+                <br>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8 ">
+        
+                    <div class="rounded-md lg:shadow-lg shadow col-span-2 success-bpopup">
+                        <h1 class="process">Certificates</h1>
+                        {% for certificate in certificates %}
+                            <div class="form-sending">
+                                <p class="date-range">Begin - {{certificate.date_begin}}</p>
+                                <p class="date-range">End - {{certificate.date_end}}</p>
+                                <button type="submit" class="check-data">Open</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
     <div class="b-container statistics text-center col-5 col-lg-3"> 
 
         <a href="javascript:PopUpShow3th()">Statistics</a>
@@ -46,8 +79,8 @@
                 <br>
                 <div class="grid lg:grid-cols-3 mt-12 gap-8 ">
         
-                    <div class="rounded-md lg:shadow-lg shadow col-span-2">
-                        <div class="grade-form text-center" data-action="add_mark">
+                    <div class="rounded-md lg:shadow-lg shadow col-span-2 grade-bpopup">
+                        <div class="text-center" data-action="add_mark">
                             <p class="add-mark">
                                 <i class="fa-solid fa-circle-plus success-icon"></i>
                                 Я получил 5..)
@@ -131,6 +164,16 @@
 
         $("#popup1").hide();
         $("#popup2").hide();
+        $("#popup4").hide();
+        $("#popup5").hide();
+        $("#popup6").hide();
+    }
+
+    function PopUpShow2th(){
+        $("#popup2").show();
+
+        $("#popup1").hide();
+        $("#popup3").hide();
         $("#popup4").hide();
         $("#popup5").hide();
         $("#popup6").hide();

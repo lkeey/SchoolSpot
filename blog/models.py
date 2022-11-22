@@ -156,7 +156,9 @@ class Certificate(models.Model):
 
     date_begin = models.DateTimeField('', default=datetime.now)
     date_end = models.DateTimeField('', default=datetime.now)
-
+    
+    def __str__(self):
+        return self.student.user.username
 
 def unique_slugify(length):
 

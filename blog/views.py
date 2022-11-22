@@ -40,6 +40,7 @@ class UsertListView(ListView):
         context = {
             'user': user,
             'student': student,
+            'certificates': Certificate.objects.filter(student=student)
         }
 
         return context
@@ -137,7 +138,7 @@ class CertificateView(View):
 
         print("DATA - ", begin_date, end_date)
 
-        Certificate.objects.create(
+        Certificate.objects.get_or_create(
             student=student,
             date_begin=begin_date,
             date_end=end_date
@@ -218,10 +219,11 @@ def rating(request):
 
         # 2021-10-22T16:00:00.000Z
         # %Y-%m-%dT%H:%M:%S.%fZ
+
         if form.is_valid(): 
             grade_form = form.cleaned_data['grade'] 
             obj = Student.objects.filter(grade=grade_form, owner__date_created__range=(begin_date, end_date))
-            print("OBJ", obj)
+            
             context = {
                 "status": True,
                 "form": form,

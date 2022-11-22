@@ -34,5 +34,7 @@ urlpatterns = [
     path('rating', views.rating, name='rating'),
     # create certificate
     path('<begin_date>/<end_date>/<student>/certificate', CertificateView.as_view(), name='add_certificate'),
+    # show pdf
+    path('<begin_date>/<end_date>/<student>/pdf', CertificateView.as_view(), name='add_certificate'),
 
 ]
