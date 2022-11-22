@@ -411,7 +411,7 @@ body {
       align-items: center;
       justify-content: center;
   
-      padding-bottom: 10px;
+      padding-bottom: 1vh;
       
       z-index: 100;
     }
@@ -435,7 +435,7 @@ body {
       align-items: center;
       justify-content: center;
       height: 54px;
-      width: 20vw;
+      width: 23vw;
       font-size: 1.25rem;
       font-weight: 500;
       border-radius: 99px;
@@ -472,14 +472,12 @@ body {
     input[id="radio-4"]:checked ~ .glider {
       transform: translateX(300%);
     }
-    input[id="radio-5"]:checked ~ .glider {
-      transform: translateX(400%);
-    }
+    
     .glider {
       position: absolute;
       display: flex;
       height: 54px;
-      width: 20vw;
+      width: 23vw;
       background-color: var(--secondary-color);
       z-index: 1;
       border-radius: 99px;

@@ -23,16 +23,8 @@
             <i class="fa-solid fa-chart-simple"></i> Rating   
             </label>
 
-
-            <input type="radio" id="radio-4" name="tabs" onclick="location.href = '{% url "posts_feed" %}';"/>
-            <label class="tab" for="radio-4">
-                <i class="fa-solid fa-comment"></i> 
-                Chat
-               
-            </label>
-            
-            <input type="radio" id="radio-5" name="tabs" onclick="location.href = '{% url "student_profile" %}';" />
-            <label class="tab" for="radio-5"><i class="fa-solid fa-house-flood-water"></i> Profile</label>
+            <input type="radio" id="radio-4" name="tabs" onclick="location.href = '{% url "student_profile" %}';" />
+            <label class="tab" for="radio-4"><i class="fa-sharp fa-solid fa-gears"></i> Profile</label>
             
             <span class="glider"></span>
         </div>
@@ -52,15 +44,10 @@
         } else if (location.pathname === '{% url "rating" %}'){
             //alert("3_rd TAB");
             document.getElementById("radio-3").checked = true;
-        } else if (location.pathname === '{% url "posts_feed" %}'){
+        } else if (location.pathname === '{% url "student_profile" %}'){
             //alert("4_th TAB");
             document.getElementById("radio-4").checked = true;
-        } else if (location.pathname === '{% url "student_profile" %}') {
-            //alert("5_th TAB");
-            document.getElementById("radio-5").checked = true;
-
-        };
-
+        } 
     };
 
     
