@@ -44,6 +44,8 @@ class Student(models.Model):
         related_name='student',
     )
 
+    admin = models.BooleanField(default=False)
+
     id_user = models.IntegerField()
     
     grade = models.CharField('', choices=CHOICES, max_length=100)
@@ -59,13 +61,14 @@ class Student(models.Model):
     def get_amount_marks(self):
         return self.owner.all().count()
 
+
 class Post(models.Model):
     class Meta:
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
 
     author = models.ForeignKey(User,
-                on_delete=models.CASCADE,
+        on_delete=models.CASCADE,
     )
 
     image = models.ImageField(upload_to='post_images')
@@ -125,6 +128,7 @@ class PostLike(LikesBase):
     obj = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
+        related_name="author_obj"
     )
 
 class Mark(models.Model):
@@ -157,6 +161,8 @@ class Certificate(models.Model):
     date_begin = models.DateTimeField('', default=datetime.now)
     date_end = models.DateTimeField('', default=datetime.now)
     
+    was_added = models.DateTimeField('', default=datetime.now)
+
     def __str__(self):
         return self.student.user.username
 

@@ -1,6 +1,7 @@
 <script>
     function to_likes()
-    {
+    {   
+        alert("HI")
         var current = $(this);
         var type = current.data('type');
         var pk = current.data('id');
@@ -13,7 +14,7 @@
             data : { 'obj' : pk },
      
             success : function (json) {
-                //alert(category)
+                //alert(pk)
                 if (type == "post"){
                     const like_classes = document.getElementById(pk+category).classList;
                     //alert(like_classes)

@@ -1,6 +1,6 @@
 from django import template
 
-from blog.models import PostLike, Certificate
+from blog.models import PostLike, Certificate, Mark
 
 register = template.Library()
 
@@ -11,6 +11,14 @@ def was_liked(user, id):
         return True
     except PostLike.DoesNotExist:
         return False
+
+@register.simple_tag
+def amount_marks_period(student, begin, end):
+
+    return Mark.objects.filter(
+        student=student,
+        date_created__range=(begin, end)
+    ).count()
 
 @register.simple_tag
 def was_certificated(student, begin_date, end_date):

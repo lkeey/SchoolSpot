@@ -12,7 +12,8 @@ from django.views.generic.edit import FormMixin
 from django.urls.base import reverse_lazy
 from django.http import HttpResponse
 import json
-from django.utils.text import slugify
+from reportlab.pdfgen import canvas 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .forms import PostCreateForm, GradeForm
 from .models import (
@@ -20,6 +21,9 @@ from .models import (
         PostLike, Mark, Certificate
     )
 from django.db.models import Count
+from django.core import serializers
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -40,7 +44,7 @@ class UsertListView(ListView):
         context = {
             'user': user,
             'student': student,
-            'certificates': Certificate.objects.filter(student=student)
+            'certificates': Certificate.objects.filter(student=student).order_by("-was_added")
         }
 
         return context
@@ -127,8 +131,6 @@ class MarkView(View):
 class CertificateView(View):
     model = Certificate
 
-    print("CERTIFICATE1")
-
     def post(self, request, begin_date, end_date, student):
         user = auth.get_user(request)
 
@@ -153,17 +155,21 @@ class CertificateView(View):
             content_type="application/json"
         ) 
 
+
 @login_required(login_url='sign_in')
-def feed(request):
+def feed(request, page):
+    print("FEEEEEEEEEED")
     # show all posts
 
-    context = {
-        "user": request.user,
-        "student": request.user.student.first,
-        "all_posts": Post.objects.filter().order_by('-date_created'),
-    }
+    if request.method == "GET":
 
-    return render(request, 'blog/posts_feed.html', context=context)
+        context = {
+            "user": request.user,
+            "student": request.user.student.first,
+            "all_posts": Post.objects.all().order_by('-date_created')[:2+page],
+        }
+
+        return render(request, 'blog/posts_feed.html', context=context)
 
 @login_required(login_url='sign_in')
 def post_create(request):
@@ -248,7 +254,36 @@ def rating(request):
     }
 
     return render(request, "blog/rating.html", context)
- 
+
+def show_pdf(request, begin_date, end_date):
+    user = request.user
+    student = Student.objects.get(user=user)
+
+    response = HttpResponse(content_type='application/pdf') 
+    response['Content-Disposition'] = f'attachment; filename="{student}.pdf"' 
+    
+    p = canvas.Canvas(response) 
+    p.setFont("Times-Roman", 55) 
+    p.drawString(100,700, f"{student} - ") 
+    p.drawString(200,600, f"Является победителем среди учеников {student.grade} в акции '...'") 
+    p.drawString(300,500, f"От {begin_date} До {end_date}") 
+    p.showPage() 
+    p.save() 
+    
+    return response 
+
+def top_posts(request):
+        # show all posts
+
+    context = {
+        "user": request.user,
+        "student": request.user.student.first,
+        "all_posts": Post.objects.annotate(count=Count("author_obj__id")).order_by('-count'),
+    }
+
+    return render(request, 'blog/posts_feed.html', context=context)
+
+
 def sign_in(request):
     # logging
     if request.method == 'POST':
@@ -269,7 +304,7 @@ def sign_in(request):
                 }
 
             # return render(request, 'discussions/posts_feed.html', data)
-            return redirect('posts_feed')
+            return redirect('posts_feed', page=0)
 
         else:
             messages.warning(request, 'Data is invalid')
@@ -282,6 +317,24 @@ def sign_in(request):
     }
 
     return render(request, "blog/sign_in.html", context)
+
+def loadMore(request):
+    # next page
+    print("LOOOOAD")
+
+    if request.method == "POST":
+        offset = int(request.POST['offset'])
+        limit = 2
+        posts = Post.objects.all().order_by('-date_created')[offset:offset+limit]
+        totalData = Post.objects.count()
+        posts_json = serializers.serialize("json", posts)
+        print("posts_json", posts_json)
+        return JsonResponse(
+            data={
+                "posts": posts_json,
+                "totalResult": totalData,
+            }
+        )
 
 def sign_up(request):
     # registration
@@ -340,7 +393,7 @@ def sign_up(request):
                             }
 
                         # return render(request, 'discussions/posts_feed.html', data)
-                        return redirect('posts_feed')
+                        return redirect('posts_feed', page=0)
                 else:
                     messages.info(request, 'The username must be more than 2 characters and the password more than 7')
 

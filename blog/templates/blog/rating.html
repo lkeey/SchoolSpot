@@ -26,19 +26,22 @@
                     <div class="text-center">
                     {% for student in prod %}
                         <div class="form-sending">
-                            <h3>{{student}}, {{student.get_amount_marks}}</h3>
-
+                            {% amount_marks_period student begin_date_model end_date_model as amount %}
+                            <h3>{{student}}, {{amount}}</h3>
+                            
                             {% was_certificated student begin_date_model end_date_model as certificated%}
                             {% if certificated %}    
                                 <h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i> Has Already Sent</h5>
                             
                             {% else %}
+                                {% if student.admin  %}
                                 <div data-action="send_certificate"
                                 data-student="{{student}}"
                                 class="check-data send-certificate"
-                                id="data-cert">
-                                    <p id="sending-cert">Send Sertificate</p>
+                                id="data-cert-{{student}}">
+                                    <p id="sending-cert-{{student}}">Send Sertificate</p>
                                 </div>
+                                {% endif %}
                             {% endif %}
                         </div>
                     {% endfor %}
@@ -64,10 +67,10 @@
             data : {},
      
             success : function (json) {            
-                let paragraph = document.querySelector('#sending-cert');
-                alert(paragraph);
+                let paragraph = document.querySelector('#sending-cert-'+student);
+                //alert(student);
 
-                let div = document.querySelector('#data-cert');;
+                let div = document.querySelector('#data-cert-'+student);;
                 div.classList.remove('check-data');
 
                 paragraph.innerHTML = '<h5 class="warning-message"><i class="success-icon fa-solid fa-circle-check"></i> Has Already Sent</h5>';

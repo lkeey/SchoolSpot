@@ -49,11 +49,11 @@
                     <div class="rounded-md lg:shadow-lg shadow col-span-2 success-bpopup">
                         <h1 class="process">Certificates</h1>
                         {% for certificate in certificates %}
-                            <div class="form-sending">
+                            <form class="form-sending" action="{% url 'show_pdf' certificate.date_begin certificate.date_end %}">
                                 <p class="date-range">Begin - {{certificate.date_begin}}</p>
                                 <p class="date-range">End - {{certificate.date_end}}</p>
                                 <button type="submit" class="check-data">Open</button>
-                            </div>
+                            </form>
                         {% endfor %}
                     </div>
                 </div>
