@@ -157,16 +157,17 @@ class CertificateView(View):
 
 
 @login_required(login_url='sign_in')
-def feed(request, page):
-    print("FEEEEEEEEEED")
+def feed(request, page=0):
     # show all posts
 
     if request.method == "GET":
 
         context = {
+            "page": page+1,
+            "end_page": True if (Post.objects.all().count() >= (page+1)*5) else False, 
             "user": request.user,
             "student": request.user.student.first,
-            "all_posts": Post.objects.all().order_by('-date_created')[:2+page],
+            "all_posts": Post.objects.all().order_by('-date_created')[5*page:5*(page+1)],
         }
 
         return render(request, 'blog/posts_feed.html', context=context)
@@ -272,13 +273,15 @@ def show_pdf(request, begin_date, end_date):
     
     return response 
 
-def top_posts(request):
+def top_posts(request, page=0):
         # show all posts
 
     context = {
         "user": request.user,
+        "page": page+1, 
+        "end_page": True if (Post.objects.all().count() >= (page+1)*5) else False, 
         "student": request.user.student.first,
-        "all_posts": Post.objects.annotate(count=Count("author_obj__id")).order_by('-count'),
+        "all_posts": Post.objects.annotate(count=Count("author_obj__id")).order_by('-count')[page*5:5*(page+1)],
     }
 
     return render(request, 'blog/posts_feed.html', context=context)

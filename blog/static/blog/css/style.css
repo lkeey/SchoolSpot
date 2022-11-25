@@ -1007,7 +1007,7 @@ body {
   
     width: 90vw;
   }
-  
+
   .process {
     font-weight: 500;
     font-size: 40px;
@@ -1047,6 +1047,17 @@ body {
     margin-left: 2vw;
   }
   
+  .category-post {
+    font-size: 25px;
+    font-weight: 600;
+
+    margin: 2vw 3vw;
+
+    min-width: fit-content;
+    display: inline-block;
+  }
+
+
   .create-acc {
     font-size: 15px;
     font-weight: 400;
