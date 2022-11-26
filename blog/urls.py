@@ -31,6 +31,8 @@ urlpatterns = [
     path('<int:id>/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
     # лайк в like_posts
     path('like_posts/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
+    # лайк в top_posts
+    path('top_posts/post/<int:pk>/like/', LikekView.as_view(model=PostLike), name='like_post'),
     # add mark
     path('mark', MarkView.as_view(), name='add_mark'),
     # rating

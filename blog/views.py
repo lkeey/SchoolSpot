@@ -24,7 +24,8 @@ from django.db.models import Count
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-
+from django.template.loader import get_template
+from xhtml2pdf import pisa 
 # Create your views here.
 
 class UsertListView(ListView):
@@ -50,7 +51,6 @@ class UsertListView(ListView):
         return context
 
     def post(self, request, **kwargs):
-        print("POST!!")
         student = Student.objects.get(user=request.user)
 
         if request.FILES.get('image') == None:
@@ -262,17 +262,39 @@ def show_pdf(request, begin_date, end_date):
     user = request.user
     student = Student.objects.get(user=user)
 
+    grade = ""
+    for symbol in student.grade:
+        if symbol == "А" or symbol == "Б" or symbol =="B":
+            grade += f' "{symbol}"'
+        else:
+            grade += symbol
+
+    print(grade)
+
+    context = {
+        'grade': grade,
+        'student': student, 
+        'begin_date': begin_date,
+        'end_date': end_date,
+    }
+
     response = HttpResponse(content_type='application/pdf') 
     response['Content-Disposition'] = f'attachment; filename="{student}.pdf"' 
     
-    p = canvas.Canvas(response) 
-    p.setFont("Times-Roman", 55) 
-    p.drawString(100,700, f"{student} - ") 
-    p.drawString(200,600, f"Является победителем среди учеников {student.grade} в акции '...'") 
-    p.drawString(300,500, f"От {begin_date} До {end_date}") 
-    p.showPage() 
-    p.save() 
-    
+    template = get_template("blog/pdf_view.html")
+    html = template.render(context)
+
+    # p.drawString(100,700, f"{student} - ") 
+    # p.drawString(200,600, f"Является победителем среди учеников {student.grade} в акции '...'") 
+    # p.drawString(300,500, f"От {begin_date} До {end_date}") 
+   
+
+    pisa_status = pisa.CreatePDF(
+        html, dest = response
+    )
+
+    if pisa_status.err:
+        return HttpResponse("We had errors")
     return response 
 
 @login_required(login_url='sign_in')
