@@ -172,6 +172,8 @@ def feed(request, page=0):
 
         return render(request, 'blog/posts_feed.html', context=context)
 
+
+
 @login_required(login_url='sign_in')
 def post_create(request):
     # добавление поста
@@ -273,6 +275,7 @@ def show_pdf(request, begin_date, end_date):
     
     return response 
 
+@login_required(login_url='sign_in')
 def top_posts(request, page=0):
         # show all posts
 
@@ -282,6 +285,23 @@ def top_posts(request, page=0):
         "end_page": True if (Post.objects.all().count() >= (page+1)*5) else False, 
         "student": request.user.student.first,
         "all_posts": Post.objects.annotate(count=Count("author_obj__id")).order_by('-count')[page*5:5*(page+1)],
+    }
+
+    return render(request, 'blog/posts_feed.html', context=context)
+
+@login_required(login_url='sign_in')
+def like_posts(request, page=0):
+    # show liked posts
+    user = request.user
+
+    obj = Post.objects.filter(author_obj__in=PostLike.objects.values("id"))
+    
+    context = {
+        "user": user,
+        "page": page+1, 
+        "end_page": True if (obj.count() >= (page+1)*5) else False, 
+        "student": user.student.first,
+        "all_posts": obj,
     }
 
     return render(request, 'blog/posts_feed.html', context=context)

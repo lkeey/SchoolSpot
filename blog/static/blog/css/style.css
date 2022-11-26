@@ -1008,6 +1008,7 @@ body {
     width: 90vw;
   }
 
+
   .process {
     font-weight: 500;
     font-size: 40px;
@@ -1057,6 +1058,29 @@ body {
     display: inline-block;
   }
 
+  .chosen-catagory {
+    transition: transform 1s;
+
+    min-height: fit-content;
+    min-width: fit-content;
+
+    font-size: 30px;
+
+    color: white;
+    background-color: #000000;
+  
+    border-radius: 30px;
+  
+    font-weight: 500;
+  
+    padding: 1vw 3vw;
+
+  }
+
+  .category-post {
+    height: 30px;
+    transition: all .5s ease;
+  }
 
   .create-acc {
     font-size: 15px;

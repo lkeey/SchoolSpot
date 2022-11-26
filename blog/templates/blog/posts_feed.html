@@ -8,12 +8,7 @@
     {% include "blog/like.html" %}
 
     <div>
-        <div class="warning-message">
-            <h3>Tasks</h3>
-            <h5>1 - pagination by url</h5>
-            <h5>2 - delete completed tasks</h5>
-            <h5>3 - button all posts</h5>
-        </div>
+        
         {% for message in messages %}
                 
             {% if message.tags == 'alert-success' %}
@@ -29,18 +24,21 @@
         <div class="form-logging text-center">
         
             <a href="{% url 'top_posts' %}" class="none-a text-center category-post">
-                <i class="just-icon fa-solid fa-arrow-up-right-from-square"></i> Top Posts
+                <div id="top">
+                    <i class="wave-icon fa-solid fa-arrow-up-right-from-square"></i> Top Posts
+                </div>
             </a>
             <a href="{% url 'posts_feed' %}" class="none-a text-center category-post">
-                <i class="fa-brands fa-ioxhost success-icon"></i> All Posts
+                <div id="feed">
+                    <i class="fa-brands fa-ioxhost success-icon"></i> All Posts
+                </div>
             </a>
-            <a href="{% url 'top_posts' %}" class="none-a text-center category-post">
-                <i class="fa-regular fa-heart danger-icon"></i> Liked Posts
+            <a href="{% url 'like_posts' %}" class="none-a text-center category-post">
+                <div id="like">
+                    <i class="fa-regular fa-heart danger-icon"></i> Liked Posts
+                </div>
             </a>
-
         </div>
-
-        
     </div>
     
     {% if all_posts|length > 0 %}
@@ -61,9 +59,19 @@
 <script>
     function checkCategory() {
         if (location.pathname === '{% url "posts_feed" %}'){
+            const feed_classes = document.getElementById("feed").classList;
+            feed_classes.add("chosen-catagory")
             return 1;
         } else if (location.pathname === '{% url "top_posts" %}'){
+            const top_classes = document.getElementById("top").classList;
+            top_classes.add("chosen-catagory")
+            
             return 2;
+        } else if (location.pathname === '{% url "like_posts" %}'){
+            const like_classes = document.getElementById("like").classList;
+            like_classes.add("chosen-catagory")
+            
+            return 3;
         }
     }
 
@@ -78,6 +86,9 @@
             }
             else if (_info == 2){
                 location.href = '/top_posts/{{page}}';
+            }
+            else if (_info == 3){
+                location.href = '/like_posts/{{page}}';
             }
         });
     });
